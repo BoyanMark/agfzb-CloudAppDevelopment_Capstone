@@ -3,8 +3,9 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 # from .models import related models
-
+from .models import CarModel
 # from .restapis import related methods
+from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf, post_request
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
@@ -35,23 +36,28 @@ def contact(request):
 def login_request(request):
     context = {}
     if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["psw"]
-        user = authenticate(username=username, password=password)
-        print(user)
+        # pull from dictionary
+        username = request.POST['username']
+        password = request.POST['psw']
+        # check auth
+        user = authenticate(username=username, password=password) 
         if user is not None:
+            # login if valid
             login(request, user)
-            return redirect("djangoapp")
+            return render(request, 'djangoapp/index.html', context)
         else:
-            context["message"] = "Invalid username or password."
-            return render(request, "djangoapp/user_login.html", context)
+            return render(request, 'djangoapp/index.html', context)
     else:
-        return render(request, "djangoapp/user_login.html", context)
+        return render(request, 'djangoapp/index.html', context)
 
 # Create a `logout_request` view to handle sign out request
 def logout_request(request):
+    context = {}
+    # get user from session id
+    print("Log out the user `{}`".format(request.user.username))
     logout(request)
-    return redirect("djangoapp")
+    # redirect back to the index.html
+    return render(request, 'djangoapp/index.html', context)
 
 # Create a `registration_request` view to handle sign up request
 def registration_request(request):
