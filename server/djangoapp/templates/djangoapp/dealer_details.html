@@ -8,11 +8,28 @@
 </head>
 
     <body>
-
+        
     <!--Add a nav bar here -->
-
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                  <a class="navbar-brand" href="#">Navigation Bar</a>
+            </div>
+        </div>
+    </nav>
     <!-- Add reviews as cards -->
-
+    {% if course_list %}
+    <ul>
+    {% for course in course_list %}
+        <div>
+            <img src="{{ MEDIA_URL }}/{{ course.image }}" width="360" height="360" >
+            <h1><b>{{ course.name }}</b></h1>
+        </div>
+    {% endfor %}
+    </ul>
+{% else %}
+<p>No Dealers available.</p>
+{% endif %}
     </body>
 
 </html>
