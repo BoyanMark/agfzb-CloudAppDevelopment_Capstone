@@ -23,7 +23,7 @@ class CarModel(models.Model):
     # - Dealer id, used to refer a dealer created in cloudant database
     dealer_id = models.IntegerField()
     # - Type (CharField with a choices argument to provide limited choices such as Sedan, SUV, WAGON, etc.)
-    type_c = models.CharField(max_length=10, choices=(('Sedan', 'Sedan',), ('SUV', 'SUV'), ('HATCHBACK', 'HATCHBACK'),('WAGON', 'WAGON')))
+    type_c = models.CharField(max_length=10, choices=(("SEDAN", "SEDAN",), ("SUV", "SUV"), ("HATCHBACK", "HATCHBACK"),("WAGON", "WAGON")))
     # - Year (DateField)
     year = models.DateField()
     # - __str__ method to print a car make object
