@@ -1,6 +1,6 @@
 import requests
+import os
 import json
-# import related models here
 from .models import CarDealer, DealerReview
 from requests.auth import HTTPBasicAuth
 
@@ -12,31 +12,33 @@ def get_request(url, **kwargs):
     print(kwargs)
     print("GET from {} ".format(url))
     try:
+        # Call get method of requests library with URL and parameters
         response = requests.get(
-            url, headers={"Content-Type": "application/json"}, params=kwargs)
+            url, headers={'Content-Type': 'application/json'}, params=kwargs)
     except:
-        # Error handler
+        # If any error occurs
         print("Network exception occurred")
     status_code = response.status_code
     print("With status {} ".format(status_code))
     json_data = json.loads(response.text)
     return json_data
 
+
 # Create a `post_request` to make HTTP POST requests
-# e.g., response = requests.post(url, params=kwargs, json=payload)
 def post_request(url, json_payload, **kwargs):
     print("Payload: ", json_payload, ". Params: ", kwargs)
     print(f"POST {url}")
     try:
-        response = requests.post(url, headers={"Content-Type": "application/json"},
+        response = requests.post(url, headers={'Content-Type': 'application/json'},
                                  json=json_payload, params=kwargs)
     except:
-        # Error handler
+        # If any error occurs
         print("Network exception occurred")
     status_code = response.status_code
     print("With status {} ".format(status_code))
     json_data = json.loads(response.text)
     return json_data
+
 
 # Create a get_dealers_from_cf method to get dealers from a cloud function
 # def get_dealers_from_cf(url, **kwargs):
@@ -70,6 +72,8 @@ def get_dealers_from_cf(url, **kwargs):
 # def get_dealer_by_id_from_cf(url, dealerId):
 # - Call get_request() with specified arguments
 # - Parse JSON results into a DealerView object list
+
+
 def get_dealer_reviews_from_cf(url, dealerId):
     results = []
     # Call get_request with a URL parameter
@@ -101,15 +105,13 @@ def get_dealer_reviews_from_cf(url, dealerId):
 # - Call get_request() with specified arguments
 # - Get the returned sentiment label such as Positive or Negative
 def analyze_review_sentiments(text):
-    URL = "https://api.eu-gb.natural-language-understanding.watson.cloud.ibm.com/instances/5220b6cd-b632-4a2a-8f8d-fb49e9096c4f"
-    API_KEY = os.getenv("NLU_API_KEY")
+    URL = 'https://api.eu-gb.natural-language-understanding.watson.cloud.ibm.com/instances/5220b6cd-b632-4a2a-8f8d-fb49e9096c4f'
+    API_KEY = os.getenv('NLU_API_KEY')
     params = json.dumps({"text": text, "features": {"sentiment": {}}})
     response = requests.post(
-        URL, data=params, headers={"Content-Type": "application/json"}, auth=HTTPBasicAuth("apikey", API_KEY)
+        URL, data=params, headers={'Content-Type': 'application/json'}, auth=HTTPBasicAuth('apikey', API_KEY)
     )
     try:
-        return response.json()["sentiment"]["document"]["label"]
+        return response.json()['sentiment']['document']['label']
     except KeyError:
-        return "neutral"
-
-
+        return 'neutral'
